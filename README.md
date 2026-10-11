@@ -9,7 +9,7 @@ A hands-on Identity and Access Management (IAM) lab built with Keycloak, Docker 
 - [x] Keycloak running
 - [x] Company realm, departments and roles (RBAC)
 - [x] Bulk employee import from CSV via the Admin REST API
-- [ ] Single Sign-On across three department apps
+- [x] Single Sign-On across three department apps
 - [ ] Multi-Factor Authentication for Finance
 - [ ] LDAP federation
 

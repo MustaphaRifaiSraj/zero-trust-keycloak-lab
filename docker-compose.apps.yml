@@ -1,0 +1,90 @@
+services:
+  hr-site:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./sites/hr:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  engineering-site:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./sites/engineering:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  finance-site:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./sites/finance:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  hr-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
+    depends_on: [keycloak, hr-site]
+    ports:
+      - "4181:4180"
+    environment:
+      OAUTH2_PROXY_PROVIDER: keycloak-oidc
+      OAUTH2_PROXY_OIDC_ISSUER_URL: http://${VM_IP}:8080/realms/acme-corp
+      OAUTH2_PROXY_CLIENT_ID: hr-portal
+      OAUTH2_PROXY_CLIENT_SECRET: ${HR_CLIENT_SECRET}
+      OAUTH2_PROXY_REDIRECT_URL: http://${VM_IP}:4181/oauth2/callback
+      OAUTH2_PROXY_UPSTREAMS: http://hr-site:80
+      OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+      OAUTH2_PROXY_COOKIE_SECRET: ${COOKIE_SECRET}
+      OAUTH2_PROXY_COOKIE_NAME: _hr_portal
+      OAUTH2_PROXY_COOKIE_SECURE: "false"
+      OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+      OAUTH2_PROXY_ALLOWED_ROLES: hr-access
+      OAUTH2_PROXY_SCOPE: openid email profile
+      OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+      OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL: "true"
+    restart: unless-stopped
+
+  engineering-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
+    depends_on: [keycloak, engineering-site]
+    ports:
+      - "4182:4180"
+    environment:
+      OAUTH2_PROXY_PROVIDER: keycloak-oidc
+      OAUTH2_PROXY_OIDC_ISSUER_URL: http://${VM_IP}:8080/realms/acme-corp
+      OAUTH2_PROXY_CLIENT_ID: engineering-portal
+      OAUTH2_PROXY_CLIENT_SECRET: ${ENG_CLIENT_SECRET}
+      OAUTH2_PROXY_REDIRECT_URL: http://${VM_IP}:4182/oauth2/callback
+      OAUTH2_PROXY_UPSTREAMS: http://engineering-site:80
+      OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+      OAUTH2_PROXY_COOKIE_SECRET: ${COOKIE_SECRET}
+      OAUTH2_PROXY_COOKIE_NAME: _engineering_portal
+      OAUTH2_PROXY_COOKIE_SECURE: "false"
+      OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+      OAUTH2_PROXY_ALLOWED_ROLES: engineering-access
+      OAUTH2_PROXY_SCOPE: openid email profile
+      OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+      OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL: "true"
+    restart: unless-stopped
+
+  finance-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
+    depends_on: [keycloak, finance-site]
+    ports:
+      - "4183:4180"
+    environment:
+      OAUTH2_PROXY_PROVIDER: keycloak-oidc
+      OAUTH2_PROXY_OIDC_ISSUER_URL: http://${VM_IP}:8080/realms/acme-corp
+      OAUTH2_PROXY_CLIENT_ID: finance-portal
+      OAUTH2_PROXY_CLIENT_SECRET: ${FIN_CLIENT_SECRET}
+      OAUTH2_PROXY_REDIRECT_URL: http://${VM_IP}:4183/oauth2/callback
+      OAUTH2_PROXY_UPSTREAMS: http://finance-site:80
+      OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+      OAUTH2_PROXY_COOKIE_SECRET: ${COOKIE_SECRET}
+      OAUTH2_PROXY_COOKIE_NAME: _finance_portal
+      OAUTH2_PROXY_COOKIE_SECURE: "false"
+      OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+      OAUTH2_PROXY_ALLOWED_ROLES: finance-access
+      OAUTH2_PROXY_SCOPE: openid email profile
+      OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+      OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL: "true"
+    restart: unless-stopped
