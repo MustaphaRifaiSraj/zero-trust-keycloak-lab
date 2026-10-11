@@ -1,0 +1,9 @@
+# Secrets: NEVER upload these
+.env
+*.secret
+
+# Build leftovers
+target/
+providers/*.jar
+__pycache__/
+*.pyc
