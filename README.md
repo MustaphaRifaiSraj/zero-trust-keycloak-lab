@@ -7,8 +7,18 @@ A hands-on Identity and Access Management (IAM) lab built with Keycloak, Docker 
 ## Progress
 - [x] Virtual machine and Docker
 - [x] Keycloak running
-- [ ] Company realm, departments and roles (RBAC)
+- [x] Company realm, departments and roles (RBAC)
 - [ ] Bulk employee import from CSV via the Admin REST API
 - [ ] Single Sign-On across three department apps
 - [ ] Multi-Factor Authentication for Finance
 - [ ] LDAP federation
+
+## Design: who can open what (RBAC)
+
+| Department (group) | Role (badge) | Portal they may open |
+|---|---|---|
+| hr | hr-access | HR portal |
+| engineering | engineering-access | Engineering portal |
+| finance | finance-access | Finance portal (also requires MFA) |
+
+People are never given roles directly. They join a department, and the department carries the role. Offboarding is one action: remove the person from the group.
