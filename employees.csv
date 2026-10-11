@@ -1,0 +1,11 @@
+first_name,last_name,email,department
+Maria,Santos,maria.santos@acme.test,hr
+Daniel,Lee,daniel.lee@acme.test,hr
+Grace,Chen,grace.chen@acme.test,hr
+Priya,Nair,priya.nair@acme.test,engineering
+Omar,Haddad,omar.haddad@acme.test,engineering
+Sofia,Rossi,sofia.rossi@acme.test,engineering
+Kenji,Tanaka,kenji.tanaka@acme.test,finance
+Amara,Okafor,amara.okafor@acme.test,finance
+Lucas,Meyer,lucas.meyer@acme.test,finance
+Alex,Morgan,alex.morgan@acme.test,hr|engineering|finance
