@@ -22,3 +22,14 @@ A hands-on Identity and Access Management (IAM) lab built with Keycloak, Docker 
 | finance | finance-access | Finance portal (also requires MFA) |
 
 People are never given roles directly. They join a department, and the department carries the role. Offboarding is one action: remove the person from the group.
+
+## Automation scripts
+| Script | What it does |
+|---|---|
+| `import_users.py` | Reads a CSV and creates employees and department memberships through the Keycloak Admin REST API |
+| `require_mfa.py` | Requires every member of the Finance group to enrol an authenticator app |
+| `provision_realm.py` | Builds a full company setup (realm, groups, roles, role mappings) from scratch |
+| `csv_to_ldif.py` | Converts a CSV employee list into an LDIF file that fills the OpenLDAP directory |
+| `assign_ldap_groups.py` | Places users imported from LDAP into their Keycloak department groups |
+
+All scripts ask for the admin password at run time, so no secrets are stored in the repository.
