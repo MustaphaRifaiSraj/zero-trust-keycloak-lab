@@ -33,3 +33,6 @@ People are never given roles directly. They join a department, and the departmen
 | `assign_ldap_groups.py` | Places users imported from LDAP into their Keycloak department groups |
 
 All scripts ask for the admin password at run time, so no secrets are stored in the repository.
+
+## Custom Keycloak plug-in (SPI)
+`business-hours-spi/` contains a custom Authenticator written in Java. It blocks logins outside configurable business hours and is applied only to the Finance portal through a per-client authentication flow override.

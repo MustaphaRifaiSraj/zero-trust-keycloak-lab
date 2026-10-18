@@ -1,0 +1,4 @@
+services:
+  keycloak:
+    volumes:
+      - ./providers:/opt/keycloak/providers
